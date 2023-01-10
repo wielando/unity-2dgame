@@ -540,7 +540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemId: 1
   _isItemCollectable: 1
-  _isItemExploreable: 0
+  _isItemExploreable: 1
   _isItemStackable: 0
   _itemText:
   - Item Text 1
@@ -769,7 +769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemId: 3
-  _isItemCollectable: 0
+  _isItemCollectable: 1
   _isItemExploreable: 1
   _isItemStackable: 0
   _itemText: []
@@ -3438,8 +3438,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemId: 2
-  _isItemCollectable: 0
-  _isItemExploreable: 1
+  _isItemCollectable: 1
+  _isItemExploreable: 0
   _isItemStackable: 0
   _itemText: []
   _exploreText:

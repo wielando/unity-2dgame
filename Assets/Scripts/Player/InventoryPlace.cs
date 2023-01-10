@@ -11,9 +11,17 @@ public class InventoryPlace : MonoBehaviour
     
     public void PlaceItemToInventoryPlace(GameObject item)
     {
-        GameObject duplicatedItem = Instantiate(item, gameObject.transform);
+        Vector3 newPosition = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+        Quaternion newRotation = new Quaternion(0, 0, 0,0);
 
-        Debug.Log(duplicatedItem);
+        Instantiate(item, newPosition, newRotation, gameObject.transform);
+
+        SetCurrentItem(item.GetComponent<Item>());
+    }
+
+    private void SetCurrentItem(Item item)
+    {
+        _currentItem = item;
     }
 
 }

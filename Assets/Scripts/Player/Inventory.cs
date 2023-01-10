@@ -42,11 +42,6 @@ public class Inventory : MonoBehaviour
 
     }
 
-    private void PlaceItemInInventoryPlace(GameObject item)
-    {
-
-    }
-
     private bool IsItemStackable(GameObject item)
     {
         return item.GetComponent<Item>()._isItemStackable;

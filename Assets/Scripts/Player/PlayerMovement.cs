@@ -38,7 +38,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 // If player press KeyCode K on the nearest Item execute Item Behaviour
                 if (Input.GetKeyDown(KeyCode.K))
-                { 
+                {
+                    if (item.GetCurrentItem() != null)
+                        item.SetCurrentItemToDefault();
+
                     item.ExecuteItemBehaviour();
                 }
             }

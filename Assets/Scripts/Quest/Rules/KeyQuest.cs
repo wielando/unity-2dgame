@@ -54,8 +54,6 @@ public class KeyQuest : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.K))
             {
 
-                Debug.Log("Key K is pressed");
-
                 if(IsQuestAlreadySolved()) {
                     return;
                 }
@@ -69,6 +67,7 @@ public class KeyQuest : MonoBehaviour
                     }
                 } else
                 {
+                    Debug.Log("Quest now started!");
                     StartQuest();
                 }
 
@@ -112,6 +111,7 @@ public class KeyQuest : MonoBehaviour
             _followQuest.SetActive(true);
         }
 
+        Debug.Log("Quest is solved!");
         return true;
     }
 

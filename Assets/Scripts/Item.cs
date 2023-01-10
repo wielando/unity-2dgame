@@ -7,11 +7,13 @@ public class Item : MonoBehaviour
 
     public int _itemId;
 
-    private GameObject _currentItem;
+    private static GameObject _currentItem;
 
     public bool _isItemCollectable;
     public bool _isItemExploreable;
     public bool _isItemStackable;
+
+    private bool _isItemAlreadyExplored;
 
     [TextArea(1, 10)]
     public string[] _itemText;
@@ -40,23 +42,33 @@ public class Item : MonoBehaviour
 
         _dialogManager = GameObject.Find("DialogManager").GetComponent<DialogManager>();
         _inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
+
+        if(_isItemExploreable)
+            _isItemAlreadyExplored = false;
     }
 
     private void Update()
     {
-        // Add the Item into Inventory If the previous Dialogue for collecting an Item is done and is now collectable
-        if(!_dialogManager.GetDialogState() && _dialogManager.GetDialogType() == "CollectingItem" && _dialogManager.GetCollectableNow())
+        if (_currentItem != null)
         {
-            CollectItem();
 
-            // Set DialogManager Members to default
-            _dialogManager.SetCollectableNow(false);
-            _dialogManager.SetDialogType(null);
+            // Add the Item into Inventory If the previous Dialogue for collecting an Item is done and is now collectable
+            if (!_dialogManager.GetDialogState() && _dialogManager.GetDialogType() == "CollectingItem" && _dialogManager.GetCollectableNow())
+            {
+                CollectItem();
+
+                // Set DialogManager Members to default
+                _dialogManager.SetCollectableNow(false);
+                _dialogManager.SetDialogType(null);
+                _isItemAlreadyExplored = false;
+            }
         }
     }
 
     public void ExecuteItemBehaviour()
     {
+        SetCurrentItem(gameObject);
+
         // If Item is Exploreable and collectable execute a Choice DialogBox
         if(_isItemExploreable && _isItemCollectable)
         {
@@ -74,8 +86,16 @@ public class Item : MonoBehaviour
                 return;
             }
 
-            // If Item is not in Inventory and is Collectable and has a ExploreText open the Choice DialogBox
-            _dialogManager.OpenSelectDialogBox(_itemText, _exploreText);
+            if (_isItemExploreable && _isItemAlreadyExplored)
+            {
+                // If Item is not in Inventory and is Collectable and has a ExploreText open the Choice DialogBox
+                _dialogManager.OpenSelectDialogBox(_itemText, _exploreText);
+            }
+            else
+            {
+                _dialogManager.StartExploreDialoge(_exploreText);
+                _isItemAlreadyExplored = true;
+            }
             
             return;
         }
@@ -83,8 +103,7 @@ public class Item : MonoBehaviour
         if(_isItemCollectable && !_isItemExploreable)
         {
             _dialogManager.StartItemDialog(_itemText);
-            CollectItem();
-            
+
             return;
         }
 
@@ -95,10 +114,30 @@ public class Item : MonoBehaviour
         }
     }
 
+    private void SetCurrentItem(GameObject currentItem)
+    {
+        // Make sure that the there is only 1 currentItem at this point
+        SetCurrentItemToDefault();
+       
+
+        _currentItem = currentItem;
+    }
+
+    public void SetCurrentItemToDefault()
+    {
+        if (_currentItem != null)
+            _currentItem = null;
+    }
+
+    public GameObject GetCurrentItem()
+    {
+        return _currentItem;
+    }
+
     public void CollectItem()
     {
         Debug.Log("Collecting Item function called!");
-       _inventory.StoreItemInInventory(gameObject);
+        _inventory.StoreItemInInventory(_currentItem);
     }
 
     public void ExecuteItemEffect()
